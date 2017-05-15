@@ -3,12 +3,12 @@ import logging
 import ftrack_api
 
 from ftrack_action_handler.action import (
-    ResultBaseAction
+    BaseAction
 )
 
-class FindAndReplace(ResultBaseAction):
-    LABEL = 'find and replace'
-    IDENTIFIER = 'ftrack.test.find_and_replace'
+class FindAndReplace(BaseAction):
+    label = 'find and replace'
+    identifier = 'ftrack.test.find_and_replace'
 
     def discover(self, uid, session, entities, user, values):
         if self.validate_selection(entities):
@@ -18,7 +18,7 @@ class FindAndReplace(ResultBaseAction):
 
         return False
 
-    def launch(self, session, uid, entities, user, values, job):
+    def launch(self, session, uid, entities, user, values):
         '''Callback method for action.'''
 
         self.logger.info(
@@ -117,8 +117,7 @@ if __name__ == '__main__':
         level=logging.INFO
     )
 
-    session = ftrack_api.Session(
-    )
+    session = ftrack_api.Session()
 
     action_handler = FindAndReplace(
         session
