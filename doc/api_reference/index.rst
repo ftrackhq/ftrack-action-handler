@@ -7,10 +7,10 @@
 API reference
 *************
 
-ftrack-action-handler
+ftrack_action_handler
 ===============================
 
-.. automodule:: ftrack-action-handler
+.. automodule:: ftrack_action_handler.action
 
 .. toctree::
     :maxdepth: 1

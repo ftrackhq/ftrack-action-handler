@@ -13,6 +13,8 @@ class BaseAction(object):
     description = None
 
     def __init__(self, session):
+        '''Expects a ftrack_api.Session instance'''
+
         self.logger = logging.getLogger(
             '{0}.{1}'.format(__name__, self.__class__.__name__)
         )
@@ -76,10 +78,10 @@ class BaseAction(object):
 
         *uid* is the unique identifier for the event
 
-         *entities* is a list of tuples each containing the
-         entity type and the entity id.
+        *entities* is a list of tuples each containing the
+        entity type and the entity id.
 
-         *values* is a dictionary containing potential user settings
+        *values* is a dictionary containing potential user settings
 
         '''
 
@@ -169,11 +171,11 @@ class BaseAction(object):
 
         *uid* is the unique identifier for the event
 
-         *entities* is a list of tuples each containing the
-         entity type and the entity id.
+        *entities* is a list of tuples each containing the
+        entity type and the entity id.
 
-         *values* is a dictionary containing potential user settings
-         from previous runs.
+        *values* is a dictionary containing potential user settings
+        from previous runs.
 
         '''
         raise NotImplementedError()
@@ -193,11 +195,11 @@ class BaseAction(object):
 
         *uid* is the unique identifier for the event
 
-         *entities* is a list of tuples each containing the
-         entity type and the entity id.
+        *entities* is a list of tuples each containing the
+        entity type and the entity id.
 
-         *values* is a dictionary containing potential user settings
-         from previous runs.
+        *values* is a dictionary containing potential user settings
+        from previous runs.
 
         '''
 

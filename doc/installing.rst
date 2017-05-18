@@ -11,7 +11,7 @@ Installing
 
 Installation is simple with `pip <http://www.pip-installer.org/>`_::
 
-    pip install ftrack-action-handler
+    pip install git+https://bitbucket.org/ftrack/ftrack-action-handler.git
 
 Building from source
 ====================
