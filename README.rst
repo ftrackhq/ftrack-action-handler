@@ -2,7 +2,7 @@
 ftrack-action-handler
 ###############################
 
-Short description of project.
+Simple example implementation of a BaseClass for handeling ftrack actions.
 
 *************
 Documentation
