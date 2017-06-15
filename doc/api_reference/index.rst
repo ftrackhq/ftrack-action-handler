@@ -10,11 +10,5 @@ API reference
 ftrack_action_handler
 ===============================
 
-.. automodule:: ftrack_action_handler.action
 
-.. toctree::
-    :maxdepth: 1
-    :glob:
-
-    */index
-    *
+.. autoclass:: ftrack_action_handler.action.BaseAction

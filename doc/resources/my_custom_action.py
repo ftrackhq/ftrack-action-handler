@@ -58,6 +58,6 @@ if __name__ == '__main__':
 
     # Wait for event for 100 seconds
     session.event_hub.wait(
-        duration=1000
+        duration=100
     )
 
