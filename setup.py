@@ -58,6 +58,7 @@ setup(
         'lowdown >= 0.1.0, < 2'
     ],
     install_requires=[
+        'ftrack-python-api >= 1, < 2'
     ],
     tests_require=[
         'pytest >= 2.3.5, < 3'
