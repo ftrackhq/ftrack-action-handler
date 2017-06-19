@@ -6,9 +6,22 @@ import logging
 import ftrack_api
 
 class BaseAction(object):
-    '''Custom Action base class'''
+    '''Custom Action base class
+
+    `label` a descriptive string identifing your action.
+
+    `varaint` To group actions together, give them the same
+    label and specify a unique variant per action.
+
+    `identifier` a unique identifier for your action.
+
+    `description` a verbose descriptive text for you action
+
+     '''
 
     label = None
+
+    variant = None
     identifier = None
     description = None
 
@@ -42,6 +55,7 @@ class BaseAction(object):
         )
 
     def register(self):
+        '''Registers the action, subscribing the the discover and launch topics.'''
         self._session.event_hub.subscribe(
             'topic=ftrack.action.discover', self._discover
         )
@@ -66,22 +80,32 @@ class BaseAction(object):
             return {
                 'items': [{
                     'label': self.label,
+                    'varian': self.variant,
                     'description':self.description,
                     'actionIdentifier': self.identifier,
+
                 }]
             }
 
-    def discover(self, session, uid, entities, user, values):
+    def discover(self, session, uid, entities, source, values, event):
         '''Return true if we can handle the selected entities.
 
         *session* is a `ftrack_api.Session` instance
 
         *uid* is the unique identifier for the event
 
-        *entities* is a list of tuples each containing the
-        entity type and the entity id.
+        *entities* is a list of tuples each containing the entity type and the entity id.
+        If the entity is a hierarchical you will always get the entity
+        type TypedContext, once retrieved through a get operation you
+        will have the "real" entity type ie. example Shot, Sequence
+        or Asset Build.
+
+        *source* dictionary containing information about the source of the event,
+        application id, current user etc.
 
         *values* is a dictionary containing potential user settings
+
+        *event* the unmodified original event
 
         '''
 
@@ -91,7 +115,7 @@ class BaseAction(object):
         '''Return *event* translated structure to be used with the API.'''
 
         _uid = event['source']['id']
-        _user = event['source']['user']['id']
+        _source = event['source']
 
         _values = event['data'].get('values', {})
         _selection = event['data'].get('selection', [])
@@ -104,17 +128,19 @@ class BaseAction(object):
                 )
             )
 
+
         return [
             _uid,
             _entities,
-            _user,
-            _values
+            _source,
+            _values,
+            event
         ]
 
     def _get_entity_type(self, entity):
         '''Return translated entity type tht can be used with API.'''
         entity_type = entity.get('entityType')
-        object_typeid = entity.get('objectTypeId')
+        object_typeid = None
 
         for schema in self._session.schemas:
             alias_for = schema.get('alias_for')
@@ -124,6 +150,7 @@ class BaseAction(object):
                 alias_for['id'].lower() == entity_type and
                 object_typeid == alias_for.get('classifiers', {}).get('object_typeid')
             ):
+
                 return schema['id']
 
         for schema in self._session.schemas:
@@ -164,18 +191,31 @@ class BaseAction(object):
         )
 
 
-    def launch(self, session, uid, entities, user, values):
-        '''Callback method for the custom action
+    def launch(self, session, uid, entities, source, values, event):
+        '''Callback method for the custom action.
+
+        return either a bool ( True if successful or False if the action failed )
+        or a dictionary with they keys `message` and `success`, the message should be a
+        string and will be displayed as feedback to the user, success should be a bool,
+        True if successful or False if the action failed.
 
         *session* is a `ftrack_api.Session` instance
 
         *uid* is the unique identifier for the event
 
-        *entities* is a list of tuples each containing the
-        entity type and the entity id.
+        *entities* is a list of tuples each containing the entity type and the entity id.
+        If the entity is a hierarchical you will always get the entity
+        type TypedContext, once retrieved through a get operation you
+        will have the "real" entity type ie. example Shot, Sequence
+        or Asset Build.
+
+        *source* dictionary containing information about the source of the event,
+        application id, current user etc.
 
         *values* is a dictionary containing potential user settings
         from previous runs.
+
+        *event* the unmodified original event
 
         '''
         raise NotImplementedError()
@@ -188,39 +228,56 @@ class BaseAction(object):
                 'items': interface
             }
 
-    def interface(self, session, uid, entities, user, values):
+    def interface(self, session, uid, entities, source, values, event):
         '''Return a interface if applicable or None
 
         *session* is a `ftrack_api.Session` instance
 
         *uid* is the unique identifier for the event
 
-        *entities* is a list of tuples each containing the
-        entity type and the entity id.
+        *entities* is a list of tuples each containing the entity type and the entity id.
+        If the entity is a hierarchical you will always get the entity
+        type TypedContext, once retrieved through a get operation you
+        will have the "real" entity type ie. example Shot, Sequence
+        or Asset Build.
+
+        *source* dictionary containing information about the source of the event,
+        application id, current user etc.
 
         *values* is a dictionary containing potential user settings
         from previous runs.
+
+        *event* the unmodified original event
 
         '''
 
         return None
 
-    def _handle_result(self, session, result, uid, entities, user, values):
+    def _handle_result(self, session, result, uid, entities, source, values, event):
         '''Validate the returned result from the action callback'''
 
-        if not isinstance(result, dict):
-            raise ValueError(
-                'Launch must return a dictionary received : {0}.'.format(
-                    type(result)
+        if isinstance(result, bool):
+            result = {
+                'success':result,
+                'message': (
+                    'Executed : {0}'.format(
+                        self.label
+                    )
                 )
-            )
+            }
 
-        for key in ('success', 'message'):
-            if key in result:
-                continue
+        elif isinstance(result, dict):
+            for key in ('success', 'message'):
+                if key in result:
+                    continue
 
-            raise KeyError(
-                'Missing required key : {0}.'.format(key)
+                raise KeyError(
+                    'Missing required key : {0}.'.format(key)
+                )
+
+        else:
+            self.logger.error(
+                'Invalid result type must be bool or dictionary!'
             )
 
         session.commit()

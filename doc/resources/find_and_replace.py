@@ -10,15 +10,15 @@ class FindAndReplace(BaseAction):
     label = 'find and replace'
     identifier = 'ftrack.test.find_and_replace'
 
-    def discover(self, uid, session, entities, user, values):
-        if self.validate_selection(entities):
+    def discover(self, session, uid, entities, source, values, event):
+        if not self.validate_selection(entities):
             return super(FindAndReplace, self).discover(
-                uid, session, entities, user, values
+                session, uid, entities, source, values, event
             )
 
-        return False
+        return True
 
-    def launch(self, session, uid, entities, user, values):
+    def launch(self, session, uid, entities, source, values, event):
         '''Callback method for action.'''
 
         self.logger.info(
@@ -72,7 +72,7 @@ class FindAndReplace(BaseAction):
         # For example check the length or entityType of items in selection.
         return True
 
-    def interface(self, session, uid, entities, user, values):
+    def interface(self, session, uid, entities, source, values, event):
         if (
             not values or not (
                 values.get('attribute') and
@@ -112,6 +112,23 @@ class FindAndReplace(BaseAction):
             ]
 
 
+def register(session, **kw):
+    '''Register plugin. Called when used as an plugin.'''
+
+    # Validate that session is an instance of ftrack_api.Session. If not,
+    # assume that register is being called from an old or incompatible API and
+    # return without doing anything.
+    if not isinstance(session, ftrack_api.session.Session):
+        return
+
+
+    action_handler = FindAndReplace(
+        session
+    )
+
+    action_handler.register()
+
+
 if __name__ == '__main__':
     logging.basicConfig(
         level=logging.INFO
@@ -119,11 +136,7 @@ if __name__ == '__main__':
 
     session = ftrack_api.Session()
 
-    action_handler = FindAndReplace(
-        session
-    )
-
-    action_handler.register()
+    register(session)
 
     session.event_hub.wait(
         duration=1000

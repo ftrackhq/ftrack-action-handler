@@ -14,7 +14,7 @@ class MyCustomAction(BaseAction):
     identifier = 'my.custom.action'
     description = 'This is an example action'
 
-    def discover(self, session, uid, entities, user, values):
+    def discover(self, session, uid, entities, source, values, event):
         '''Return True if we can handle the discovery.'''
 
         # Only acknowlage the discovery if the selection
@@ -29,18 +29,35 @@ class MyCustomAction(BaseAction):
 
         return True
 
-    def launch(self, session, uid, entities, user, values):
+    def launch(self, session, uid, entities, source, values, event):
         '''Callback action'''
 
         for entity_type, entity_id in entities:
-
-
-            version = self.session.get(
+            version = session.get(
                 entity_type, entity_id
             )
 
             # DO SOMETHING WITH THE VERSION
             return True
+
+
+
+def register(session, **kw):
+    '''Register plugin. Called when used as an plugin.'''
+
+    # Validate that session is an instance of ftrack_api.Session. If not,
+    # assume that register is being called from an old or incompatible API and
+    # return without doing anything.
+    if not isinstance(session, ftrack_api.session.Session):
+        return
+
+
+    action_handler = MyCustomAction(
+        session
+    )
+
+    action_handler.register()
+
 
 
 if __name__ == '__main__':
@@ -50,11 +67,7 @@ if __name__ == '__main__':
 
     session = ftrack_api.Session()
 
-    action_handler = MyCustomAction(
-        session
-    )
-
-    action_handler.register()
+    register(session)
 
     # Wait for event for 100 seconds
     session.event_hub.wait(
