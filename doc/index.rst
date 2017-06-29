@@ -5,7 +5,7 @@
 ftrack-action-handler
 ###############################
 
-Simple example implementation of a BaseClass for handeling ftrack actions.
+Simple example implementation of a base class for handling ftrack actions.
 
 .. toctree::
     :maxdepth: 1

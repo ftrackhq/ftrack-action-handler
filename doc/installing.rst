@@ -54,6 +54,7 @@ Dependencies
 ============
 
 * `Python <http://python.org>`_ >= 2.7, < 3
+* ftrack-python-api >= 1, < 2
 
 Additional For building
 -----------------------

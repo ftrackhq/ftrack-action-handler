@@ -8,7 +8,7 @@ Using
 *****
 
 This package only contains one class `BaseAction`. It simplifies the configuration of a new
-action by registring with the event hub and converting the events emitted from the server
+action by registering with the event hub and converting the events emitted from the server
 to a more pythonic data representation.
 
 The example actions below can be run directly or added to your ftrack connect plugin path
