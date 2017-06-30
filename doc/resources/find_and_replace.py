@@ -1,12 +1,13 @@
+# :coding: utf-8
 import logging
 
 import ftrack_api
 
-from ftrack_action_handler.action import (
-    BaseAction
-)
+from ftrack_action_handler.action import BaseAction
+
 
 class FindAndReplace(BaseAction):
+    '''Example action with interface to find and replace in text attributes.'''
     label = 'find and replace'
     identifier = 'ftrack.test.find_and_replace'
 
@@ -20,7 +21,6 @@ class FindAndReplace(BaseAction):
 
     def launch(self, session, uid, entities, source, values, event):
         '''Callback method for action.'''
-
         self.logger.info(
             u'Launching action with selection {0}'.format(entities)
         )
@@ -50,20 +50,19 @@ class FindAndReplace(BaseAction):
 
     def find_and_replace(self, session, entities, attribute, find, replace):
         '''Find and replace *find* and *replace* in *attribute* for *selection*.'''
-
         for entity_type, entity_id in entities:
-            entity = session.get(
-                entity_type, entity_id
-            )
+            entity = session.get(entity_type, entity_id)
 
             if entity:
                 value = entity.get(attribute)
-
                 if not isinstance(value, basestring):
+                    self.logger.info(
+                        'Ignoring attribute {0!r} with non-string value'.format(attribute)
+                    )
                     continue
 
                 entity.update({
-                    attribute:value.replace(find, replace)
+                    attribute: value.replace(find, replace)
                 })
 
     def validate_selection(self, entities):
@@ -88,9 +87,6 @@ class FindAndReplace(BaseAction):
             }, {
                 'label': 'Description',
                 'value': 'description'
-            }, {
-                'label': 'Custom attribute',
-                'value': 'custom_attribtue'
             }]
 
             return [
@@ -111,33 +107,23 @@ class FindAndReplace(BaseAction):
                 }
             ]
 
-
 def register(session, **kw):
     '''Register plugin. Called when used as an plugin.'''
-
     # Validate that session is an instance of ftrack_api.Session. If not,
     # assume that register is being called from an old or incompatible API and
     # return without doing anything.
     if not isinstance(session, ftrack_api.session.Session):
         return
 
-
-    action_handler = FindAndReplace(
-        session
-    )
-
+    action_handler = FindAndReplace(session)
     action_handler.register()
 
 
 if __name__ == '__main__':
-    logging.basicConfig(
-        level=logging.INFO
-    )
-
+    logging.basicConfig(level=logging.INFO)
     session = ftrack_api.Session()
-
     register(session)
 
-    session.event_hub.wait(
-        duration=1000
-    )
+    # Wait for events
+    logging.info('Registered actions and listening for events. Use Ctrl-C to abort.')
+    session.event_hub.wait()

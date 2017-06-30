@@ -18,9 +18,7 @@ class BaseAction(object):
     `description` a verbose descriptive text for you action
 
      '''
-
     label = None
-
     variant = None
     identifier = None
     description = None
@@ -248,19 +246,16 @@ class BaseAction(object):
         from previous runs.
 
         *event* the unmodified original event
-
         '''
-
         return None
 
     def _handle_result(self, session, result, uid, entities, source, values, event):
         '''Validate the returned result from the action callback'''
-
         if isinstance(result, bool):
             result = {
                 'success':result,
                 'message': (
-                    'Executed : {0}'.format(
+                    '{0} launched successfully.'.format(
                         self.label
                     )
                 )
@@ -272,14 +267,12 @@ class BaseAction(object):
                     continue
 
                 raise KeyError(
-                    'Missing required key : {0}.'.format(key)
+                    'Missing required key: {0}.'.format(key)
                 )
 
         else:
             self.logger.error(
                 'Invalid result type must be bool or dictionary!'
             )
-
         session.commit()
-
         return result
