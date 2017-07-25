@@ -5,6 +5,10 @@ import logging
 
 import ftrack_api
 
+#
+# session entities values event
+# update to
+
 class BaseAction(object):
     '''Custom Action base class
 
@@ -85,23 +89,17 @@ class BaseAction(object):
                 }]
             }
 
-    def discover(self, session, uid, entities, source, values, event):
+    def discover(self, session, entities, event):
         '''Return true if we can handle the selected entities.
 
         *session* is a `ftrack_api.Session` instance
 
-        *uid* is the unique identifier for the event
 
         *entities* is a list of tuples each containing the entity type and the entity id.
         If the entity is a hierarchical you will always get the entity
         type TypedContext, once retrieved through a get operation you
         will have the "real" entity type ie. example Shot, Sequence
         or Asset Build.
-
-        *source* dictionary containing information about the source of the event,
-        application id, current user etc.
-
-        *values* is a dictionary containing potential user settings
 
         *event* the unmodified original event
 
@@ -112,10 +110,6 @@ class BaseAction(object):
     def _translate_event(self, session, event):
         '''Return *event* translated structure to be used with the API.'''
 
-        _uid = event['source']['id']
-        _source = event['source']
-
-        _values = event['data'].get('values', {})
         _selection = event['data'].get('selection', [])
 
         _entities = list()
@@ -128,10 +122,7 @@ class BaseAction(object):
 
 
         return [
-            _uid,
             _entities,
-            _source,
-            _values,
             event
         ]
 
@@ -188,8 +179,7 @@ class BaseAction(object):
             self._session, response, *args
         )
 
-
-    def launch(self, session, uid, entities, source, values, event):
+    def launch(self, session, entities, event):
         '''Callback method for the custom action.
 
         return either a bool ( True if successful or False if the action failed )
@@ -199,19 +189,11 @@ class BaseAction(object):
 
         *session* is a `ftrack_api.Session` instance
 
-        *uid* is the unique identifier for the event
-
         *entities* is a list of tuples each containing the entity type and the entity id.
         If the entity is a hierarchical you will always get the entity
         type TypedContext, once retrieved through a get operation you
         will have the "real" entity type ie. example Shot, Sequence
         or Asset Build.
-
-        *source* dictionary containing information about the source of the event,
-        application id, current user etc.
-
-        *values* is a dictionary containing potential user settings
-        from previous runs.
 
         *event* the unmodified original event
 
@@ -226,12 +208,10 @@ class BaseAction(object):
                 'items': interface
             }
 
-    def interface(self, session, uid, entities, source, values, event):
+    def interface(self, session, entities, event):
         '''Return a interface if applicable or None
 
         *session* is a `ftrack_api.Session` instance
-
-        *uid* is the unique identifier for the event
 
         *entities* is a list of tuples each containing the entity type and the entity id.
         If the entity is a hierarchical you will always get the entity
@@ -239,17 +219,11 @@ class BaseAction(object):
         will have the "real" entity type ie. example Shot, Sequence
         or Asset Build.
 
-        *source* dictionary containing information about the source of the event,
-        application id, current user etc.
-
-        *values* is a dictionary containing potential user settings
-        from previous runs.
-
         *event* the unmodified original event
         '''
         return None
 
-    def _handle_result(self, session, result, uid, entities, source, values, event):
+    def _handle_result(self, session, result, entities, event):
         '''Validate the returned result from the action callback'''
         if isinstance(result, bool):
             result = {

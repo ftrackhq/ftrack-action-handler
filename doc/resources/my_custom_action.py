@@ -21,7 +21,7 @@ class MyCustomAction(BaseAction):
     #: A verbose descriptive text for you action
     description = 'This is an example action'
 
-    def discover(self, session, uid, entities, source, values, event):
+    def discover(self, session, entities, event):
         '''Return True if we can handle the discovery.'''
         # TODO: Modify to fit your needs.
         # Example, only allow a single asset version as selection.
@@ -34,7 +34,7 @@ class MyCustomAction(BaseAction):
 
         return True
 
-    def launch(self, session, uid, entities, source, values, event):
+    def launch(self, session, entities, event):
         '''Callback action'''
         for entity_type, entity_id in entities:
             entity = session.get(entity_type, entity_id)

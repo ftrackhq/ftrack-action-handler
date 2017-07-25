@@ -11,15 +11,15 @@ class FindAndReplace(BaseAction):
     label = 'find and replace'
     identifier = 'ftrack.test.find_and_replace'
 
-    def discover(self, session, uid, entities, source, values, event):
+    def discover(self, session, entities, event):
         if not self.validate_selection(entities):
             return super(FindAndReplace, self).discover(
-                session, uid, entities, source, values, event
+                session, entities,  event
             )
 
         return True
 
-    def launch(self, session, uid, entities, source, values, event):
+    def launch(self, session, entities, event):
         '''Callback method for action.'''
         self.logger.info(
             u'Launching action with selection {0}'.format(entities)
@@ -32,6 +32,8 @@ class FindAndReplace(BaseAction):
             )
 
             return
+
+        values = event['data'].get('values',{})
 
         attribute = values.get('attribute')
         find = values.get('find')
@@ -71,7 +73,9 @@ class FindAndReplace(BaseAction):
         # For example check the length or entityType of items in selection.
         return True
 
-    def interface(self, session, uid, entities, source, values, event):
+    def interface(self, session, entities, event):
+        values = event['data'].get('values', {})
+
         if (
             not values or not (
                 values.get('attribute') and
