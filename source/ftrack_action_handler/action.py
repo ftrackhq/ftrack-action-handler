@@ -5,10 +5,6 @@ import logging
 
 import ftrack_api
 
-#
-# session entities values event
-# update to
-
 class BaseAction(object):
     '''Custom Action base class
 
@@ -45,16 +41,6 @@ class BaseAction(object):
             )
 
         self._session = session
-
-    @classmethod
-    def clone_session(cls, session):
-        assert (
-            isinstance(session, ftrack_api.Session)
-        ), 'Must be ftrack_api.Session instance.'
-
-        return ftrack_api.Session(
-            session.server_url, session.api_key, session.api_user
-        )
 
     def register(self):
         '''Registers the action, subscribing the the discover and launch topics.'''
