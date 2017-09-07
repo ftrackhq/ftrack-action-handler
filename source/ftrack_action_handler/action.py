@@ -142,7 +142,7 @@ class BaseAction(object):
                     return schema['id']
 
         raise ValueError(
-            'Unable to translate entity type.'
+            'Unable to translate entity type: {0}.'.format(entity_type)
         )
 
     def _launch(self, event):
