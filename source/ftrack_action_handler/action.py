@@ -117,7 +117,6 @@ class BaseAction(object):
         # Get entity type and make sure it is lower cased. Most places except
         # the component tab in the Sidebar will use lower case notation.
         entity_type = entity.get('entityType').replace('_', '').lower()
-        object_typeid = None
 
         for schema in self._session.schemas:
             alias_for = schema.get('alias_for')
