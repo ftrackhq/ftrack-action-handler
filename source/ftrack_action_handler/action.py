@@ -122,14 +122,6 @@ class BaseAction(object):
         for schema in self._session.schemas:
             alias_for = schema.get('alias_for')
 
-            if (
-                alias_for and isinstance(alias_for, dict) and
-                alias_for['id'].lower() == entity_type and
-                object_typeid == alias_for.get('classifiers', {}).get('object_typeid')
-            ):
-
-                return schema['id']
-
         for schema in self._session.schemas:
             alias_for = schema.get('alias_for')
 
