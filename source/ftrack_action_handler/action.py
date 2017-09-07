@@ -114,7 +114,9 @@ class BaseAction(object):
 
     def _get_entity_type(self, entity):
         '''Return translated entity type tht can be used with API.'''
-        entity_type = entity.get('entityType')
+        # Get entity type and make sure it is lower cased. Most places except
+        # the component tab in the Sidebar will use lower case notation.
+        entity_type = entity.get('entityType').lower()
         object_typeid = None
 
         for schema in self._session.schemas:
