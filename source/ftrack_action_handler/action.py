@@ -227,5 +227,4 @@ class BaseAction(object):
             self.logger.error(
                 'Invalid result type must be bool or dictionary!'
             )
-        session.commit()
         return result
