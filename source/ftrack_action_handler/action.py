@@ -114,19 +114,12 @@ class BaseAction(object):
 
     def _get_entity_type(self, entity):
         '''Return translated entity type tht can be used with API.'''
-        entity_type = entity.get('entityType')
-        object_typeid = None
+        # Get entity type and make sure it is lower cased. Most places except
+        # the component tab in the Sidebar will use lower case notation.
+        entity_type = entity.get('entityType').replace('_', '').lower()
 
         for schema in self._session.schemas:
             alias_for = schema.get('alias_for')
-
-            if (
-                alias_for and isinstance(alias_for, dict) and
-                alias_for['id'].lower() == entity_type and
-                object_typeid == alias_for.get('classifiers', {}).get('object_typeid')
-            ):
-
-                return schema['id']
 
         for schema in self._session.schemas:
             alias_for = schema.get('alias_for')
