@@ -43,6 +43,13 @@ class FindAndReplace(BaseAction):
             session, entities, attribute, find, replace
         )
 
+        try:
+            session.commit()
+        except:
+            # Commit failed, rollback session and re-raise.
+            session.rollback()
+            raise
+
         return {
             'success': True,
             'message': 'Find and replace "{0}" with "{1}" on attribute "{2}"'.format(
