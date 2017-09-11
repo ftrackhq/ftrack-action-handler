@@ -41,7 +41,7 @@ class PyTest(TestCommand):
 setup(
     name='ftrack-action-handler',
     version=VERSION,
-    description='Short description of project.',
+    description='Base Class for handeling ftrack actions.',
     long_description=open(README_PATH).read(),
     keywords='ftrack',
     url='https://bitbucket.org/ftrack/ftrack-action-handler',
