@@ -68,8 +68,8 @@ class BaseAction(object):
             return {
                 'items': [{
                     'label': self.label,
-                    'varian': self.variant,
-                    'description':self.description,
+                    'variant': self.variant,
+                    'description': self.description,
                     'actionIdentifier': self.identifier,
 
                 }]

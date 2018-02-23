@@ -7,6 +7,12 @@
 Release Notes
 *************
 
+.. release:: 0.1.1
+    .. change:: fixed
+        :tags: Action
+
+        Variants not handled correctly.
+
 .. release:: 0.1.0
 
     .. change:: new
