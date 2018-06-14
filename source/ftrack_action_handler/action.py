@@ -5,6 +5,7 @@ import logging
 
 import ftrack_api
 
+
 class BaseAction(object):
     '''Custom Action base class
 
@@ -42,13 +43,18 @@ class BaseAction(object):
 
         self._session = session
 
+    @property
+    def session(self):
+        '''Return current session.'''
+        return self._session
+
     def register(self):
         '''Registers the action, subscribing the the discover and launch topics.'''
-        self._session.event_hub.subscribe(
+        self.session.event_hub.subscribe(
             'topic=ftrack.action.discover', self._discover
         )
 
-        self._session.event_hub.subscribe(
+        self.session.event_hub.subscribe(
             'topic=ftrack.action.launch and data.actionIdentifier={0}'.format(
                 self.identifier
             ),
@@ -57,11 +63,11 @@ class BaseAction(object):
 
     def _discover(self, event):
         args = self._translate_event(
-            self._session, event
+            self.session, event
         )
 
         accepts = self.discover(
-            self._session, *args
+            self.session, *args
         )
 
         if accepts:
@@ -106,7 +112,6 @@ class BaseAction(object):
                 )
             )
 
-
         return [
             _entities,
             event
@@ -118,10 +123,7 @@ class BaseAction(object):
         # the component tab in the Sidebar will use lower case notation.
         entity_type = entity.get('entityType').replace('_', '').lower()
 
-        for schema in self._session.schemas:
-            alias_for = schema.get('alias_for')
-
-        for schema in self._session.schemas:
+        for schema in self.session.schemas:
             alias_for = schema.get('alias_for')
 
             if (
@@ -130,7 +132,7 @@ class BaseAction(object):
             ):
                 return schema['id']
 
-        for schema in self._session.schemas:
+        for schema in self.session.schemas:
             if schema['id'].lower() == entity_type:
                     return schema['id']
 
@@ -140,22 +142,22 @@ class BaseAction(object):
 
     def _launch(self, event):
         args = self._translate_event(
-            self._session, event
+            self.session, event
         )
 
         interface = self._interface(
-            self._session, *args
+            self.session, *args
         )
 
         if interface:
             return interface
 
         response = self.launch(
-            self._session, *args
+            self.session, *args
         )
 
         return self._handle_result(
-            self._session, response, *args
+            self.session, response, *args
         )
 
     def launch(self, session, entities, event):
@@ -206,7 +208,7 @@ class BaseAction(object):
         '''Validate the returned result from the action callback'''
         if isinstance(result, bool):
             result = {
-                'success':result,
+                'success': result,
                 'message': (
                     '{0} launched successfully.'.format(
                         self.label
@@ -227,4 +229,5 @@ class BaseAction(object):
             self.logger.error(
                 'Invalid result type must be bool or dictionary!'
             )
+
         return result
