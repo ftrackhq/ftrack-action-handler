@@ -7,6 +7,12 @@
 Release Notes
 *************
 
+.. release:: Upcoming
+    .. change:: add
+        :tags: API
+
+        Add session property for easier access.
+
 .. release:: 0.1.2
     .. change:: fixed
         :tags: Action
