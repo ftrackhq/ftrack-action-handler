@@ -7,7 +7,7 @@
 Release Notes
 *************
 
-.. release:: Upcoming
+.. release:: 0.1.3
     .. change:: add
         :tags: API
 
@@ -20,7 +20,6 @@ Release Notes
         Variants not handled correctly.
 
 .. release:: 0.1.0
-
     .. change:: new
         :tags: Action, Event, API
 
