@@ -23,6 +23,7 @@ class BaseAction(object):
     variant = None
     identifier = None
     description = None
+    icon = None
 
     def __init__(self, session):
         '''Expects a ftrack_api.Session instance'''
@@ -73,6 +74,7 @@ class BaseAction(object):
         if accepts:
             return {
                 'items': [{
+                    'icon': self.icon
                     'label': self.label,
                     'variant': self.variant,
                     'description': self.description,
