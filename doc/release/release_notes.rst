@@ -7,6 +7,12 @@
 Release Notes
 *************
 
+.. release:: Upcoming
+    .. change:: add
+        :tags: Action
+
+        Add support for icons.
+
 .. release:: 0.1.3
     .. change:: add
         :tags: API
