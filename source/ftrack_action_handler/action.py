@@ -74,7 +74,7 @@ class BaseAction(object):
         if accepts:
             return {
                 'items': [{
-                    'icon': self.icon
+                    'icon': self.icon,
                     'label': self.label,
                     'variant': self.variant,
                     'description': self.description,
