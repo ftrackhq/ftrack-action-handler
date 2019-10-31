@@ -7,7 +7,9 @@
 Release Notes
 *************
 
-.. release:: Upcoming
+.. release:: 0.1.4
+    :date: 2019-10-31
+    
     .. change:: add
         :tags: Action
 
