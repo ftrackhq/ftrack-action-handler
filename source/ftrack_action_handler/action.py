@@ -3,6 +3,7 @@
 
 import logging
 
+from future import str
 import ftrack_api
 
 
@@ -129,7 +130,7 @@ class BaseAction(object):
             alias_for = schema.get('alias_for')
 
             if (
-                alias_for and isinstance(alias_for, basestring) and
+                alias_for and isinstance(alias_for, str) and
                 alias_for.lower() == entity_type
             ):
                 return schema['id']

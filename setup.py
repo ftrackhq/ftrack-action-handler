@@ -1,5 +1,5 @@
 # :coding: utf-8
-# :copyright: Copyright (c) 2017 ftrack
+# :copyright: Copyright (c) 2017-2020 ftrack
 
 import os
 import re
@@ -49,6 +49,9 @@ setup(
     author_email='support@ftrack.com',
     license='Apache License (2.0)',
     packages=find_packages(SOURCE_PATH),
+    project_urls={
+        'Source Code': 'https://bitbucket.org/ftrack/ftrack-action-handler/src/{}'.format(VERSION),
+    },
     package_dir={
         '': 'source'
     },
@@ -56,16 +59,24 @@ setup(
         'sphinx >= 1.2.2, < 2',
         'sphinx_rtd_theme >= 0.1.6, < 2',
         'lowdown >= 0.1.0, < 2',
-        'ftrack-python-api >= 1, < 2'
+        'ftrack-python-api >= 1, < 3',
     ],
     install_requires=[
-        'ftrack-python-api >= 1, < 2'
+        'ftrack-python-api >= 1, < 3',
+        'future >=0.16.0, < 1',
     ],
+    python_requires='>= 2.7.9, < 4.0',
     tests_require=[
         'pytest >= 2.3.5, < 3'
+    ],
+    classifiers=[
+        'License :: OSI Approved :: Apache Software License',
+        'Intended Audience :: Developers',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 3'
     ],
     cmdclass={
         'test': PyTest
     },
-    zip_safe=False
+    zip_safe=True,
 )

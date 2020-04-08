@@ -1,5 +1,5 @@
 ..
-    :copyright: Copyright (c) 2014 ftrack
+    :copyright: Copyright (c) 2014-2020 ftrack
 
 .. _release/release_notes:
 
@@ -7,9 +7,14 @@
 Release Notes
 *************
 
+.. release:: 0.2.0
+    .. change:: new
+
+        Add support for Python 3
+
 .. release:: 0.1.4
     :date: 2019-10-31
-    
+
     .. change:: add
         :tags: Action
 
