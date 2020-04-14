@@ -2,23 +2,24 @@
 # :copyright: Copyright (c) 2017-2020 ftrack
 
 import os
-import re
 
-from setuptools import setup, find_packages
+from pkg_resources import DistributionNotFound, get_distribution
+from setuptools import find_packages, setup
 from setuptools.command.test import test as TestCommand
-
 
 ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
 SOURCE_PATH = os.path.join(ROOT_PATH, 'source')
 README_PATH = os.path.join(ROOT_PATH, 'README.rst')
 
-# Read version from source.
-with open(os.path.join(
-    SOURCE_PATH, 'ftrack_action_handler', '_version.py')
-) as _version_file:
-    VERSION = re.match(
-        r'.*__version__ = \'(.*?)\'', _version_file.read(), re.DOTALL
-    ).group(1)
+
+try:
+    release = get_distribution('ftrack-action-handler').version
+    # take major/minor/patch
+    VERSION = '.'.join(release.split('.')[:3])
+
+except DistributionNotFound:
+    # package is not installed
+    VERSION = 'Unknown version'
 
 
 # Custom commands.
@@ -33,9 +34,17 @@ class PyTest(TestCommand):
     def run_tests(self):
         '''Import pytest and run.'''
         import pytest
+
         errno = pytest.main(self.test_args)
         raise SystemExit(errno)
 
+
+version_template = '''
+# :coding: utf-8
+# :copyright: Copyright (c) 2017-2020 ftrack
+
+__version__ = {version!r}
+'''
 
 # Configuration.
 setup(
@@ -49,26 +58,27 @@ setup(
     author_email='support@ftrack.com',
     license='Apache License (2.0)',
     packages=find_packages(SOURCE_PATH),
+    package_dir={'': 'source'},
     project_urls={
         'Source Code': 'https://bitbucket.org/ftrack/ftrack-action-handler/src/{}'.format(VERSION),
     },
-    package_dir={
-        '': 'source'
-    },
     setup_requires=[
+        'lowdown >= 0.1.0, < 2',
+        'setuptools>=30.3.0',
+        'setuptools_scm',
         'sphinx >= 1.2.2, < 2',
         'sphinx_rtd_theme >= 0.1.6, < 2',
-        'lowdown >= 0.1.0, < 2',
-        'ftrack-python-api >= 1, < 3',
     ],
+    tests_require=['pytest >= 2.3.5, < 3'],
+    use_scm_version={
+        'write_to': 'source/ftrack_action_handler/_version.py',
+        'write_to_template': version_template,
+    },
     install_requires=[
         'ftrack-python-api >= 1, < 3',
         'future >=0.16.0, < 1',
     ],
     python_requires='>= 2.7.9, < 4.0',
-    tests_require=[
-        'pytest >= 2.3.5, < 3'
-    ],
     classifiers=[
         'License :: OSI Approved :: Apache Software License',
         'Intended Audience :: Developers',

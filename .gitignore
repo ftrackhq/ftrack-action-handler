@@ -32,3 +32,6 @@ Thumbs.db
 .pydevproject
 .settings
 .idea/
+
+# SCM VERSION
+source/ftrack_action_handler/_version.py
