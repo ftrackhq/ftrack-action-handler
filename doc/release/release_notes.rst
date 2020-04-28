@@ -7,6 +7,11 @@
 Release Notes
 *************
 
+.. release:: 0.2.1
+    .. change:: new
+
+        Use setuptools_scm for versioning.
+
 .. release:: 0.2.0
     .. change:: new
 
