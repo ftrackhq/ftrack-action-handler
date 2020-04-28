@@ -7,12 +7,13 @@
 Release Notes
 *************
 
-.. release:: 0.2.1
+.. release:: 0.2.0
+    :date: 2020-04-28
+
     .. change:: new
 
         Use setuptools_scm for versioning.
 
-.. release:: 0.2.0
     .. change:: new
 
         Add support for Python 3
