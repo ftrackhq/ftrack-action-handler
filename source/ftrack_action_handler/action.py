@@ -1,9 +1,9 @@
 # :coding: utf-8
-# :copyright: Copyright (c) 2017 ftrack
+# :copyright: Copyright (c) 2017-2020 ftrack
 
+from builtins import str
 import logging
 
-from future import str
 import ftrack_api
 
 
