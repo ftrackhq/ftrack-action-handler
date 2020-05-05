@@ -19,23 +19,25 @@ Release Notes
     :date: 2020-04-28
 
     .. change:: new
+        :tags: API
 
         Use setuptools_scm for versioning.
 
     .. change:: new
+        :tags: API
 
         Add support for Python 3
 
 .. release:: 0.1.4
     :date: 2019-10-31
 
-    .. change:: add
+    .. change:: new
         :tags: Action
 
         Add support for icons.
 
 .. release:: 0.1.3
-    .. change:: add
+    .. change:: new
         :tags: API
 
         Add session property for easier access.
