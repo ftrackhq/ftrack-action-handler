@@ -7,6 +7,13 @@
 Release Notes
 *************
 
+.. release:: 0.2.1
+    :date: 2020-05-05
+
+    .. change:: fix
+
+        Breaking import module.
+
 .. release:: 0.2.0
     :date: 2020-04-28
 
