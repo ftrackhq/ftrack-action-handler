@@ -10,7 +10,8 @@ Release Notes
 .. release:: 0.2.1
     :date: 2020-05-05
 
-    .. change:: fix
+    .. change:: fixed
+        :tags: API
 
         Breaking import module.
 
