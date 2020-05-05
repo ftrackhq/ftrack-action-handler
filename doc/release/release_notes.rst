@@ -37,6 +37,7 @@ Release Notes
         Add support for icons.
 
 .. release:: 0.1.3
+    :date: 2018‑09‑13
 
     .. change:: new
         :tags: API
@@ -44,6 +45,7 @@ Release Notes
         Add session property for easier access.
 
 .. release:: 0.1.2
+    :date: 2018‑02‑23
 
     .. change:: fixed
         :tags: Action
@@ -51,6 +53,7 @@ Release Notes
         Variants not handled correctly.
 
 .. release:: 0.1.0
+    :date: 2017‑09‑11
 
     .. change:: new
         :tags: Action, Event, API
