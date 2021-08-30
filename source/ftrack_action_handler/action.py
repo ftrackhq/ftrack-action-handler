@@ -6,7 +6,7 @@ import logging
 import os
 import uuid
 
-
+logging.basicConfig(level=logging.INFO)
 # --------------------------------------------------------------
 # Base Action Class.
 # --------------------------------------------------------------
@@ -49,12 +49,13 @@ class BaseAction(object):
         """Action object representation."""
         return "<{0}:{1}>".format(self.__class__.__name__, self.identifier)
 
-    def __init__(self, session, limit_to_user=None):
+    def __init__(self, session, limit_to_user=None, make_unique=False):
         """Expects a ftrack_api.Session instance and optional user limiter"""
 
         self.logger = logging.getLogger(
             "{0}.{1}".format(__name__, self.__class__.__name__)
         )
+        # self.logger.setLevel(logging.DEBUG)
 
         if not all([self.label, self.identifier]):
             msg = (
@@ -84,13 +85,21 @@ class BaseAction(object):
                 self.identifier, str(uuid.uuid4())
             )
 
+        if not limit_to_user and make_unique:
+            self.identifier = "{}_{}".format(
+                self.identifier, str(uuid.uuid4())
+            )
+
         self._session = session
         self.job_id = None
 
-        prefix = os.getenv("FTRACK_ACTION_PREFIX")
+        prefix = os.getenv("FTRACK_ACTION_PREFIX", None)
         if prefix:
-            self.label = "{}_{}".format(prefix, self.label)
+            self.label = "{} {}".format(prefix.title(), self.label)
             self.identifier = "{}_{}".format(prefix, self.identifier)
+
+        self.logger.debug(self.label)
+        self.logger.debug(self.identifier)
 
     # --------------------------------------------------------------
     # Default Action Properties
@@ -274,8 +283,7 @@ class BaseAction(object):
     # Default Action Methods
     # --------------------------------------------------------------
 
-    # TODO: discuss about standalone: self.session.event_hub.wait()
-    def register(self):
+    def register(self, standalone=False):
         """Registers the action, subscribing the discover and launch topics."""
         self.session.event_hub.subscribe(
             "topic=ftrack.action.discover", self._discover
@@ -288,11 +296,18 @@ class BaseAction(object):
             self._launch,
         )
 
+        if standalone:
+            self.logger.debug(
+                'Action: {0} running as standalone.'.format(
+                    self.label
+                )
+            )
+            self.session.event_hub.wait()
+
+
     def _discover(self, event):
         entities = self._translate_event(event)
-
-        # TODO: use result from translate to do the checks below?
-
+        self.logger.info(entities)
         discoverable = True
 
         # Check user.
@@ -401,7 +416,7 @@ class BaseAction(object):
         interface = self.interface(session, entities, event)
 
         if interface:
-            return {"items": interface}
+            return interface
 
     def interface(self, session, entities, event):
         """Return a interface if applicable or None
