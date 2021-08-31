@@ -459,7 +459,7 @@ class BaseAction(object):
     # Job management.
     # --------------------------------------------------------------
 
-    def _create_job(self, event, description):
+    def create_job(self, event, description):
         """Create a new job."""
         user_id = event["source"]["user"]["id"]
         job = self.session.create(
@@ -475,7 +475,7 @@ class BaseAction(object):
         self.job_id = job_id
         return self.job_id
 
-    def _attach_component_to_job(self, job_id, component_id, description):
+    def attach_component_to_job(self, job_id, component_id, description):
         """Attach a component to a job."""
         self.session.create(
             "JobComponent", {"component_id": component_id, "job_id": job_id}
@@ -486,7 +486,7 @@ class BaseAction(object):
         job["status"] = "done"
         self.session.commit()
 
-    def _mark_job_as_failed(self, job_id, error_message):
+    def mark_job_as_failed(self, job_id, error_message):
         """Mark a job as failed."""
 
         job = self.session.get("Job", job_id)
@@ -494,7 +494,7 @@ class BaseAction(object):
         job["status"] = "failed"
         self.session.commit()
 
-    def _mark_job_as_done(self, job_id, description):
+    def mark_job_as_done(self, job_id, description):
         """Mark a job as done."""
 
         job = self.session.get("Job", job_id)
