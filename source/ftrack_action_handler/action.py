@@ -1,5 +1,5 @@
 # :coding: utf-8
-# :copyright: Copyright (c) 2021 Mackevision
+# :copyright: Copyright (c) 2017-2021 ftrack
 
 import json
 import logging
