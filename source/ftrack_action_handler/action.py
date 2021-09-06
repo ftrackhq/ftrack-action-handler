@@ -416,7 +416,9 @@ class BaseAction(object):
         interface = self.interface(session, entities, event)
 
         if interface:
-            return interface
+            return {
+                'items': interface
+            }
 
     def interface(self, session, entities, event):
         """Return a interface if applicable or None
