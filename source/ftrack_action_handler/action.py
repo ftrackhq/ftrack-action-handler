@@ -73,7 +73,7 @@ class BaseAction(object):
 
             self.logger.critical(msg)
             raise RuntimeError(msg)
-
+        self.raw_identifier = self.identifier
         if limit_to_user:
             self.limit_to_user = limit_to_user
             # if the action is tied to one user only
@@ -108,6 +108,21 @@ class BaseAction(object):
     def session(self):
         '''Return current session.'''
         return self._session
+
+    # --------------------------------------------------------------
+    # Settings stored in user metadata
+    # --------------------------------------------------------------
+    def read_settings_from_user(self, event):
+        action_user = self.get_action_user(event)
+        return json.loads(
+            action_user['metadata'].get(self.raw_identifier,
+                                        '{}'))
+
+    def write_settings_to_user(self, event, settings):
+        action_user = self.get_action_user(event)
+        action_user['metadata'][self.raw_identifier] = settings
+        self.logger.info('stored {0} on user {1}'.format(settings,action_user))
+        action_user.session.commit()
 
     # --------------------------------------------------------------
     # Custom Action methods
