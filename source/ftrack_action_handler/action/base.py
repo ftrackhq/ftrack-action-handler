@@ -18,7 +18,7 @@ class BaseAction(object):
 
     `label` a descriptive string identifing your action.
 
-    `varaint` To group actions together, give them the same
+    `variant` To group actions together, give them the same
     label and specify a unique variant per action.
 
     `identifier` a unique identifier for your action.

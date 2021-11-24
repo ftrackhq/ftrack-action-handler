@@ -8,10 +8,11 @@ import uuid
 from ftrack_action_handler.action import BaseAction
 
 logging.basicConfig(level=logging.INFO)
-# --------------------------------------------------------------
-# Base Action Class.
-# --------------------------------------------------------------
 
+
+# --------------------------------------------------------------
+# Advanced Action Class.
+# --------------------------------------------------------------
 
 
 class AdvancedBaseAction(BaseAction):
@@ -57,7 +58,6 @@ class AdvancedBaseAction(BaseAction):
         self.logger = logging.getLogger(
             '{0}.{1}'.format(__name__, self.__class__.__name__)
         )
-        # self.logger.setLevel(logging.DEBUG)
 
         if not all([self.label, self.identifier]):
             msg = (
