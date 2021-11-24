@@ -7,6 +7,24 @@
 Release Notes
 *************
 
+
+.. release:: Upcoming
+
+    .. change:: changed
+        :tags: API
+
+        Refactor code to split baseclasses in separate modules.
+
+    .. change:: new
+        :tags: API
+
+        Provide new `AdvancedBaseClass` to allow more granular and complete control over the action behaviour.
+        
+        .. note::
+
+            Contribution by `johannes.hezer <johannes.hezer@accenture.com>`_ .
+
+
 .. release:: 0.2.1
     :date: 2020-05-05
 
