@@ -19,6 +19,10 @@ Release Notes
         :tags: API
 
         Provide new `AdvancedBaseClass` to allow more granular and complete control over the action behaviour.
+        
+        .. note::
+
+            Contribution by `johannes.hezer <johannes.hezer@accenture.com>`_ .
 
 
 .. release:: 0.2.1
