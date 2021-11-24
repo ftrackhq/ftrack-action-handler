@@ -12,3 +12,4 @@ ftrack_action_handler
 
 
 .. autoclass:: ftrack_action_handler.action.BaseAction
+.. autoclass:: ftrack_action_handler.action.AdvancedBaseAction
