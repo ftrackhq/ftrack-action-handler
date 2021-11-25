@@ -97,14 +97,6 @@ class AdvancedBaseAction(BaseAction):
         self.logger.debug(self.identifier)
 
     # --------------------------------------------------------------
-    # Default Action Properties
-    # --------------------------------------------------------------
-    @property
-    def session(self):
-        '''Return current session.'''
-        return self._session
-
-    # --------------------------------------------------------------
     # Settings stored in user metadata
     # --------------------------------------------------------------
     def read_settings_from_user(self, event):
