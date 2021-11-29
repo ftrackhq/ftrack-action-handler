@@ -48,9 +48,6 @@ class AdvancedBaseAction(BaseAction):
     def __init__(self, session, limit_to_user=None, make_unique=False):
         '''Expects a ftrack_api.Session instance and optional user limiter'''
         super(AdvancedBaseAction, self).__init__(session)
-        self.logger = logging.getLogger(
-            '{0}.{1}'.format(__name__, self.__class__.__name__)
-        )
 
         if not all([self.label, self.identifier]):
             msg = (
