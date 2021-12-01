@@ -29,13 +29,6 @@ class AdvancedBaseAction(BaseAction):
 
     '''
 
-    # Action fields
-    label = None  # Required field
-    variant = None
-    identifier = None  # Required field
-    description = None
-    icon = None
-
     __KNOWN_TYPES__ = ['Context', 'AssetVersion', 'FileComponent']
 
     # TODO: maybe always append uuid to identifier?
@@ -54,10 +47,7 @@ class AdvancedBaseAction(BaseAction):
 
     def __init__(self, session, limit_to_user=None, make_unique=False):
         '''Expects a ftrack_api.Session instance and optional user limiter'''
-
-        self.logger = logging.getLogger(
-            '{0}.{1}'.format(__name__, self.__class__.__name__)
-        )
+        super(AdvancedBaseAction, self).__init__(session)
 
         if not all([self.label, self.identifier]):
             msg = (
@@ -104,26 +94,27 @@ class AdvancedBaseAction(BaseAction):
         self.logger.debug(self.identifier)
 
     # --------------------------------------------------------------
-    # Default Action Properties
-    # --------------------------------------------------------------
-    @property
-    def session(self):
-        '''Return current session.'''
-        return self._session
-
-    # --------------------------------------------------------------
     # Settings stored in user metadata
     # --------------------------------------------------------------
     def read_settings_from_user(self, event):
+        '''read settings from the user if there are any
+            Returns a dict like values coming from the interface
+        '''
         action_user = self.get_action_user(event)
         return json.loads(
             action_user['metadata'].get(self.raw_identifier,
                                         '{}'))
 
-    def write_settings_to_user(self, event, settings):
+    def write_settings_to_user(self, event, settings=None):
+        '''*event* the unmodified original event
+           *settings* dict with information to store related to the action
+           if none is provided all values from the event[data] are taken
+        '''
+        if not settings:
+            settings = event['data']['values']
         action_user = self.get_action_user(event)
-        action_user['metadata'][self.raw_identifier] = settings
-        self.logger.info('stored {0} on user {1}'.format(settings,action_user))
+        action_user['metadata'][self.raw_identifier] = json.dumps(settings)
+        self.logger.info('stored {0} on user {1}'.format(settings, action_user))
         action_user.session.commit()
 
     # --------------------------------------------------------------
@@ -259,19 +250,6 @@ class AdvancedBaseAction(BaseAction):
             return True
         return True
 
-    def _translate_event(self, event):
-        '''Return *event* translated structure to be used with the API.'''
-
-        _selection = event['data'].get('selection', [])
-
-        _entities = list()
-        for entity in _selection:
-            _entities.append(
-                (self._get_entity_type(entity), entity.get('entityId'))
-            )
-
-        return _entities
-
     def _get_entity_type(self, entity):
         '''Return translated entity type that can be used with API.'''
         # Get entity type and make sure it is lower cased. Most places except
@@ -297,33 +275,12 @@ class AdvancedBaseAction(BaseAction):
         )
 
     # --------------------------------------------------------------
-    # Default Action Methods
+    # Default Action Method Overwrites
     # --------------------------------------------------------------
-
-    def register(self, standalone=False):
-        '''Registers the action, subscribing the discover and launch topics.'''
-        self.session.event_hub.subscribe(
-            'topic=ftrack.action.discover', self._discover
-        )
-
-        self.session.event_hub.subscribe(
-            'topic=ftrack.action.launch and data.actionIdentifier={0}'.format(
-                self.identifier
-            ),
-            self._launch,
-        )
-
-        if standalone:
-            self.logger.debug(
-                'Action: {0} running as standalone.'.format(
-                    self.label
-                )
-            )
-            self.session.event_hub.wait()
 
 
     def _discover(self, event):
-        entities = self._translate_event(event)
+        entities = self._translate_event(self.session, event)
         self.logger.info(entities)
         discoverable = True
 
@@ -394,85 +351,6 @@ class AdvancedBaseAction(BaseAction):
         '''
 
         return True
-
-    def _launch(self, event):
-        entities = self._translate_event(event)
-
-        interface = self._interface(self.session, entities, event)
-
-        if interface:
-            return interface
-
-        response = self.launch(self.session, entities, event)
-
-        return self._handle_result(response)
-
-    def launch(self, session, entities, event):
-        '''Callback method for the custom action.
-
-        return either a bool (True if successful or False if the action failed)
-        or a dictionary with they keys `message` and `success`, the message
-        should be a string and will be displayed as feedback to the user,
-        success should be a bool, True if successful or False if the action
-        failed.
-
-        *session* is a `ftrack_api.Session` instance
-
-        *entities* is a list of tuples each containing the entity type and the
-        entity id. If the entity is a hierarchical you will always get the
-        entity type TypedContext, once retrieved through a get operation you
-        will have the 'real' entity type ie. example Shot, Sequence
-        or Asset Build.
-
-        *event* the unmodified original event
-
-        '''
-        raise NotImplementedError()
-
-    def _interface(self, session, entities, event):
-        interface = self.interface(session, entities, event)
-
-        if interface:
-            return {
-                'items': interface
-            }
-
-    def interface(self, session, entities, event):
-        '''Return a interface if applicable or None
-
-        *session* is a `ftrack_api.Session` instance
-
-        *entities* is a list of tuples each containing the entity type and the
-        entity id. If the entity is a hierarchical you will always get the
-        entity type TypedContext, once retrieved through a get operation you
-        will have the 'real' entity type ie. example Shot, Sequence
-        or Asset Build.
-
-        *event* the unmodified original event
-        '''
-        return None
-
-    def _handle_result(self, result):
-        '''Validate the returned result from the action callback'''
-        if isinstance(result, bool):
-            result = {
-                'success': result,
-                'message': ('{0} launched successfully.'.format(self.label)),
-            }
-
-        elif isinstance(result, dict):
-            for key in ('success', 'message'):
-                if key in result:
-                    continue
-
-                raise KeyError('Missing required key: {0}.'.format(key))
-
-        else:
-            self.logger.error(
-                'Invalid result type must be bool or dictionary!'
-            )
-
-        return result
 
     # --------------------------------------------------------------
     # Job management.

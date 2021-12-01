@@ -56,8 +56,11 @@ class BaseAction(object):
         '''Return current session.'''
         return self._session
 
-    def register(self):
-        '''Registers the action, subscribing the the discover and launch topics.'''
+    def register(self, standalone=False):
+        '''Registers the action, subscribing the the discover and launch topics.
+           *standalone* lets the action run in self.session useful for testing
+           and development
+        '''
         self.session.event_hub.subscribe(
             'topic=ftrack.action.discover', self._discover
         )
@@ -68,6 +71,14 @@ class BaseAction(object):
             ),
             self._launch
         )
+
+        if standalone:
+            self.logger.debug(
+                'Action: {0} running as standalone.'.format(
+                    self.label
+                )
+            )
+            self.session.event_hub.wait()
 
     def _discover(self, event):
         args = self._translate_event(
