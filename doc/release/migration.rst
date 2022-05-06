@@ -21,7 +21,7 @@ Being the new :ref:`AdvancedBaseAction <api_reference/AdvancedBaseAction>` class
     
 
 Actions build on the :ref:`BaseAction <api_reference/BaseAction>` class can be easily 
-upgraded to the new ref:`AdvancedBaseAction <api_reference/AdvancedBaseAction>` changing the baseclass, from:
+upgraded to the new :ref:`AdvancedBaseAction <api_reference/AdvancedBaseAction>` changing the baseclass, from:
 
 .. code::
 
