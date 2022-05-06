@@ -18,7 +18,7 @@ Release Notes
     .. change:: new
         :tags: API
 
-        Provide new `AdvancedBaseClass` to allow more granular and complete control over the action behaviour.
+        Provide new :ref:`AdvancedBaseAction <api_reference/AdvancedBaseAction>` to allow more granular and complete control over the action behaviour.
         
         .. note::
 
