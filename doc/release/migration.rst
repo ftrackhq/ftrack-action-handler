@@ -16,10 +16,8 @@ Upgrade to AdvancedBaseAction
 With this release we introduce a new :ref:`AdvancedBaseAction <api_reference/AdvancedBaseAction>` to 
 provide a more off the shelf set of functions to simplify the build of ftrack actions.
 
-
 Being the new :ref:`AdvancedBaseAction <api_reference/AdvancedBaseAction>` class fully interchangeable with the :ref:`BaseAction <api_reference/BaseAction>`
     
-
 Actions build on the :ref:`BaseAction <api_reference/BaseAction>` class can be easily 
 upgraded to the new :ref:`AdvancedBaseAction <api_reference/AdvancedBaseAction>` changing the baseclass, from:
 
@@ -59,6 +57,16 @@ Properties
 
 Methods
 ^^^^^^^
-
+*  **__KNOWN_TYPES__** to set a list of discoverable ftrack types.
+*  **create_job** to create a new job.
 *  **mark_job_as_failed** to mark the given job id as failed.
 *  **mark_job_as_done** to mark the given job id as done.
+*  **attach_component_to_job** to Attach a component to a job.
+*  **read_settings_from_user** to read settings from the user's metadata if there are any.
+*  **write_settings_to_user** to write settings to the user's metadata.
+*  **get_action_user** to get the source user from the event.
+
+Examples
+--------
+
+Please see :ref:`using/AdvancedBaseAction` for a code example.

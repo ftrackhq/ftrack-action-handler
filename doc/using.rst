@@ -14,6 +14,8 @@ to a more pythonic data representation.
 The example actions below can be run directly or added to your ftrack connect plugin path
 for more information see the main ftrack `documentation <http://ftrack-python-api.rtd.ftrack.com/en/latest/understanding_sessions.html#configuring-plugins>`_.
 
+.. _using/BaseAction:
+
 Example action
 ==============
 
@@ -25,6 +27,8 @@ is selected in the ftrack interface.
     :language: python
 
 
+.. _using/BaseAction/Interface:
+
 Example action with interface
 =============================
 
@@ -33,3 +37,14 @@ words in a specified attribute name on the currently selected items.
 
 .. literalinclude:: /resources/find_and_replace.py
     :language: python
+
+.. _using/AdvancedBaseAction:
+
+Example Advanced action
+=======================
+
+A simple action to remove all entries from the joblist of the triggering user.
+
+.. literalinclude:: /resources/advanced_action.py
+    :language: python
+
