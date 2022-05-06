@@ -1,10 +1,16 @@
 # :coding: utf-8
-# :copyright: Copyright (c) 2017-2020 ftrack
+# :copyright: Copyright (c) 2017-2021 ftrack
 
-from builtins import str
+import json
 import logging
+import os
+import uuid
 
-import ftrack_api
+logging.basicConfig(level=logging.INFO)
+
+# --------------------------------------------------------------
+# Base Action Class.
+# --------------------------------------------------------------
 
 
 class BaseAction(object):
@@ -12,7 +18,7 @@ class BaseAction(object):
 
     `label` a descriptive string identifing your action.
 
-    `varaint` To group actions together, give them the same
+    `variant` To group actions together, give them the same
     label and specify a unique variant per action.
 
     `identifier` a unique identifier for your action.
@@ -50,8 +56,11 @@ class BaseAction(object):
         '''Return current session.'''
         return self._session
 
-    def register(self):
-        '''Registers the action, subscribing the the discover and launch topics.'''
+    def register(self, standalone=False):
+        '''Registers the action, subscribing the the discover and launch topics.
+           *standalone* lets the action run in self.session useful for testing
+           and development
+        '''
         self.session.event_hub.subscribe(
             'topic=ftrack.action.discover', self._discover
         )
@@ -62,6 +71,14 @@ class BaseAction(object):
             ),
             self._launch
         )
+
+        if standalone:
+            self.logger.debug(
+                'Action: {0} running as standalone.'.format(
+                    self.label
+                )
+            )
+            self.session.event_hub.wait()
 
     def _discover(self, event):
         args = self._translate_event(
