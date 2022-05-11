@@ -8,7 +8,8 @@ Release Notes
 *************
 
 
-.. release:: Upcoming
+.. release:: 0.3.0
+    :date: 2022-05-11
 
     .. change:: changed
         :tags: API
