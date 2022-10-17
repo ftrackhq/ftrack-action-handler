@@ -250,30 +250,6 @@ class AdvancedBaseAction(BaseAction):
             return True
         return True
 
-    def _get_entity_type(self, entity):
-        '''Return translated entity type that can be used with API.'''
-        # Get entity type and make sure it is lower cased. Most places except
-        # the component tab in the Sidebar will use lower case notation.
-        entity_type = entity.get('entityType').replace('_', '').lower()
-
-        for schema in self.session.schemas:
-            alias_for = schema.get('alias_for')
-
-            if (
-                    alias_for
-                    and isinstance(alias_for, str)
-                    and alias_for.lower() == entity_type
-            ):
-                return schema['id']
-
-        for schema in self.session.schemas:
-            if schema['id'].lower() == entity_type:
-                return schema['id']
-
-        raise ValueError(
-            'Unable to translate entity type: {0}.'.format(entity_type)
-        )
-
     # --------------------------------------------------------------
     # Default Action Method Overwrites
     # --------------------------------------------------------------
