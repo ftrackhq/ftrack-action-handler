@@ -5,8 +5,9 @@
 
 import os
 import sys
+from sphinx_pyproject import SphinxConfig
 
-from pkg_resources import DistributionNotFound, get_distribution
+from ftrack_action_handler import __version__ as myproject_version
 
 # -- General ------------------------------------------------------------------
 # Inject source onto path so that autodoc can find it by default, but in such a
@@ -15,15 +16,6 @@ sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'source'))
 )
 
-# Extensions.
-extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.extlinks',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.todo',
-    'sphinx.ext.viewcode',
-    'lowdown',
-]
 
 # The suffix of source filenames.
 source_suffix = '.rst'
@@ -35,17 +27,8 @@ master_doc = 'index'
 project = u'ftrack-action-handler'
 copyright = u'2017, ftrack'
 
-try:
-    release = get_distribution('ftrack-action-handler').version
-    # take major/minor/patch
-    VERSION = '.'.join(release.split('.')[:3])
 
-except DistributionNotFound:
-    # package is not installed
-    VERSION = 'Unknown version'
-
-version = VERSION
-release = VERSION
+config = SphinxConfig("../pyproject.toml", globalns=globals(), config_overrides = {"version": myproject_version})
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
