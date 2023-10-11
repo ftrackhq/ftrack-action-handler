@@ -7,6 +7,12 @@
 Release Notes
 *************
 
+.. release:: Upcoming
+
+    .. change:: changed
+        :tags: API
+
+        Remove _get_entity_type from AdvancedBaseAction and rely on base class implementation.
 
 .. release:: 0.3.0
     :date: 2022-05-11
