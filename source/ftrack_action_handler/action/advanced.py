@@ -379,7 +379,7 @@ class AdvancedBaseAction(BaseAction):
 
     def _launch(self, event):
         if self.run_as_user:
-            user = event['user']['username']
+            user = event['source']['user']['username']
             try:
                 new_session = ftrack_api.Session(
                     server_url=self.session.server_url,
