@@ -5,6 +5,7 @@ import json
 import logging
 import os
 import uuid
+import ftrack_api
 from ftrack_action_handler.action import BaseAction
 
 logging.basicConfig(level=logging.INFO)
@@ -39,6 +40,7 @@ class AdvancedBaseAction(BaseAction):
     ignored_types = []  # Types ignored for this action to run
     allowed_types = []  # Types allowed for this action to run
     limit_to_user = None  # Limit the action to the user which spans it
+    run_as_user = False # Run as the user running the action, not the one registering it.
     allow_empty_context = False  # Allow to run without a selection
 
     def __repr__(self):
@@ -374,3 +376,21 @@ class AdvancedBaseAction(BaseAction):
         job['data'] = json.dumps({'description': u'{}'.format(description)})
         job['status'] = 'done'
         self.session.commit()
+
+    def _launch(self, event):
+        if self.run_as_user:
+            user = event['source']['user']['username']
+            try:
+                new_session = ftrack_api.Session(
+                    server_url=self.session.server_url,
+                    api_key=self.session.api_key,
+                    api_user=user,
+                    auto_connect_event_hub=False
+                )
+            except Exception:
+                self.logger.warn('Please ensure your action has been registered with a Global API key.')
+                raise
+
+            self._session = new_session
+
+        return super(AdvancedBaseAction, self)._launch(event)
