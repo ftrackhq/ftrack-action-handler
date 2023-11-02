@@ -1,0 +1,79 @@
+
+[project]
+name = "ftrack-action-handler"
+dynamic = ["version"]
+
+description = "Base Class for handling ftrack actions."
+keywords = ["ftrack"]
+readme = "README.md"
+
+authors = [
+    {name = "ftrack", email = "support@ftrack.com"},
+]
+
+classifiers = [
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 2",
+    "Programming Language :: Python :: 3",
+]
+requires-python = ">= 2.7.9, < 4.0"
+
+dependencies = [
+    "ftrack-python-api >= 1, < 3",
+    "future >=0.16.0, < 1",
+]
+
+[project.license]
+file = "LICENSE.txt"
+
+[project.urls]
+Homepage = "https://github.com/ftrackhq/ftrack-action-handler"
+Source = "https://github.com/ftrackhq/ftrack-action-handler.git"
+
+[build-system]
+requires = [
+    "setuptools>=61",
+    "setuptools-scm[toml]>=8.0",
+]
+build-backend = "setuptools.build_meta"
+
+[project.optional-dependencies]
+docs = [
+    "sphinx",
+    "sphinx-pyproject", 
+    "sphinx_rtd_theme",
+    "lowdown"
+]
+
+[tool.setuptools.packages.find]
+where =["source"]
+
+
+[tool.setuptools_scm]
+write_to = "source/ftrack_action_handler/_version.py"
+write_to_template = '''
+# :coding: utf-8
+# :copyright: Copyright (c) 2017-2020 ftrack
+
+__version__ = {version!r}
+'''
+
+[tool.sphinx]
+source_dir = "docs"
+config_dir = "docs"
+build-dir = "build/doc"
+all_files = 1
+builder = ["html"]
+jobs = 3
+
+[tool.sphinx-pyproject]
+project = 'ftrack-action-hanlder'
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.extlinks',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.todo',
+    'sphinx.ext.viewcode',
+    'lowdown'
+]

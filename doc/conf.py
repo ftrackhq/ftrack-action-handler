@@ -5,8 +5,9 @@
 
 import os
 import sys
+from sphinx_pyproject import SphinxConfig
 
-from pkg_resources import DistributionNotFound, get_distribution
+from ftrack_action_handler import __version__ as _version
 
 # -- General ------------------------------------------------------------------
 # Inject source onto path so that autodoc can find it by default, but in such a
@@ -35,17 +36,9 @@ master_doc = 'index'
 project = u'ftrack-action-handler'
 copyright = u'2017, ftrack'
 
-try:
-    release = get_distribution('ftrack-action-handler').version
-    # take major/minor/patch
-    VERSION = '.'.join(release.split('.')[:3])
+version = _version
+release = _version
 
-except DistributionNotFound:
-    # package is not installed
-    VERSION = 'Unknown version'
-
-version = VERSION
-release = VERSION
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
