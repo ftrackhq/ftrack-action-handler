@@ -385,7 +385,7 @@ class AdvancedBaseAction(BaseAction):
                     server_url=self.session.server_url,
                     api_key=self.session.api_key,
                     api_user=user,
-                    auto_connect_event_hub=bool(self.session._auto_connect_event_hub_thread)
+                    auto_connect_event_hub=False
                 )
             except Exception:
                 self.logger.warn('Please ensure your action has been registered with a Global API key.')
