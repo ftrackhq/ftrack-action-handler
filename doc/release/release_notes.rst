@@ -10,6 +10,11 @@ Release Notes
 .. release:: Upcoming
 
     .. change:: changed
+        :tags: Installer
+
+        Allow to install for ftrack-python-api 3.0.
+
+    .. change:: changed
         :tags: API
 
         Remove _get_entity_type from AdvancedBaseAction and rely on base class implementation.
