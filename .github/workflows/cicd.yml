@@ -1,11 +1,11 @@
-name: CI/CD
+name: Release to Pypi
 
 on:
   push:
     branches:
       - main
     tags:
-      - "v*"
+      - "*"
   pull_request:
 
 jobs:

@@ -7,6 +7,12 @@
 Release Notes
 *************
 
+.. release:: Upcoming
+
+     .. change:: new
+        :tags: Build
+
+        Add CL/Cd github action.   
 
 .. release:: 0.3.0
     :date: 2022-05-11
