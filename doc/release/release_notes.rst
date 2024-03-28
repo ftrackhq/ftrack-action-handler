@@ -14,6 +14,11 @@ Release Notes
 
         Add CL/Cd github action.   
 
+    .. change: changed
+        :tags: Build
+
+        Update build system to use pyproject.toml
+
 .. release:: 0.3.0
     :date: 2022-05-11
 
