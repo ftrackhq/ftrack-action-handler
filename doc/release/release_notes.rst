@@ -14,6 +14,11 @@ Release Notes
         Provide run_as_user property in :ref:`AdvancedBaseAction <api_reference/AdvancedBaseAction>` to run the action as the user executing it.
 
     .. change:: changed
+        :tags: Installer
+
+        Allow to install for ftrack-python-api 3.0.
+
+    .. change:: changed
         :tags: API
 
         Remove _get_entity_type from AdvancedBaseAction and rely on base class implementation.
