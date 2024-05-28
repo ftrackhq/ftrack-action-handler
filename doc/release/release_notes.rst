@@ -8,6 +8,10 @@ Release Notes
 *************
 
 .. release:: Upcoming
+    .. change:: changed
+        :tags: API
+
+        Provide run_as_user property in :ref:`AdvancedBaseAction <api_reference/AdvancedBaseAction>` to run the action as the user executing it.
 
     .. change:: changed
         :tags: Installer
